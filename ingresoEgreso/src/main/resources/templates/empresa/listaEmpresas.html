@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="https://i.imgur.com/U3LVVc7.png">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.1.1/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/css-footer.css}">
+    <title>Lista Empresas</title>
+</head>
+<body class="background-custom">
+    <header th:replace="layout/plantilla :: header"></header>
+    <section th:replace="layout/plantilla :: mainEmpresas"></section>
+    <br>
+    <section>
+        <div class="container">
+            <div class="card">
+                <h4 class="card-title">Lista de empleados</h4>
+                <div class="card-body">
+                    <div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">No.</th>
+                                <th scope="col">Nombre Empresa</th>
+                                <th scope="col">Telefono</th>
+                                <th scope="col">Direccion</th>
+                                <th scope="col">Nit</th>
+                                <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
+                                <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr sec:authorize="isAuthenticated()" th:each="empresa,contador : ${empresas}">
+                                <td th:text="${contador.count}"></td>
+                                <td th:text=${empresa.nombreEmpresa}></td>
+                                <td th:text=${empresa.telefono}></td>
+                                <td th:text=${empresa.direccion}></td>
+                                <td th:text=${empresa.NIT}></td>
+                                <td><a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/edit/} + ${empresa.idAdministrador}" th:text="Editar"></a></td>
+                                <td><a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/clean/} + ${empresa.idAdministrador}" th:text="Eliminar"></a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-4 m-4">
+        <div class="container" sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="row">
+                <div class="col-md-4">
+                    <a th:href="@{/empresa/modificarEmpresa}" class="btn btn-primary btn-block">
+                        <i class="fas fa-plus"></i>
+                        <span>Agregar</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <footer th:replace="layout/plantilla :: footer"></footer>
+    <script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>
+</body>
+</html>
